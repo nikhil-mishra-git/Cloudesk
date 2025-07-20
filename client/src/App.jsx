@@ -3,6 +3,7 @@ import axiosInstance from './utils/axios/axiosInstance'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { authLogin } from './app/userSlice'
+import { setFiles } from './app/fileSlice'
 import { CloudLoader } from './components'
 
 const App = () => {
@@ -17,9 +18,12 @@ const App = () => {
       try {
         const res = await axiosInstance.get('/auth/profile')
         console.log(res.data);
-        
+
         if (res.data?.user) {
           dispatch(authLogin({ userData: res.data.user }))
+
+          const filesRes = await axiosInstance.get('/files');
+          dispatch(setFiles(filesRes.data.files));
         }
       } catch (error) {
         console.log('User not logged in or session expired')

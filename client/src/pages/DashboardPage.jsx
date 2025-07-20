@@ -1,8 +1,19 @@
-import React from 'react'
-import { DashboardSidebar, DashboardTop } from '../components'
+import React, { useState } from 'react'
+import { DashboardSidebar, DashboardTop, FilePreviewModal } from '../components'
 import { Outlet } from 'react-router-dom'
 
 const DashboardPage = () => {
+
+  const [previewFile, setPreviewFile] = useState(null);
+
+  const handleViewFile = (file) => {
+    setPreviewFile(file);
+  };
+
+  const handleClosePreview = () => {
+    setPreviewFile(null); 
+  };
+
   return (
     <div className="h-screen flex flex-col overflow-hidden">
 
@@ -23,10 +34,15 @@ const DashboardPage = () => {
 
         <div className="flex-1 h-full overflow-y-auto rounded-3xl">
           <div className="min-h-full bg-white rounded-3xl p-4 shadow-md">
-            <Outlet />
+            <Outlet context={{ onViewFile: handleViewFile }} />
           </div>
         </div>
       </div>
+
+      {previewFile && (
+        <FilePreviewModal file={previewFile} onClose={handleClosePreview} />
+      )}
+
     </div>
   )
 }

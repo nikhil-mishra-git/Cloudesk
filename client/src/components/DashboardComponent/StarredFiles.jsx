@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FiGrid, FiList } from 'react-icons/fi';
-import { EmptyState, DocumentCard, DocumentList } from '../../components'
+import { EmptyState, DocumentCard, DocumentList } from '../../components';
 
 const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
-
     const [viewType, setViewType] = useState('grid');
+
+    const allFiles = useSelector((state) => state.file.files);
+    const starredFiles = allFiles.filter(file => file.starred);
 
     const handleViewChange = (type) => {
         setViewType(type);
@@ -14,7 +16,6 @@ const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
 
     return (
         <div className="p-4 md:p-10">
-
             <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-semibold text-zinc-700">{title}</h3>
 
@@ -43,75 +44,41 @@ const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
                 </div>
             </div>
 
-
-            {viewType === 'grid' ? (
-
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10">
-
-                    <DocumentCard
-                        fileName="Resume_Nikhil.pdf"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="pdf"
+            {/* 🔄 Check for Empty State */}
+            {starredFiles.length === 0 ? (
+                <div className="mt-16">
+                    <EmptyState
+                        title="No Starred Files"
+                        subtitle="Files you mark as important will show up here."
                     />
-
-                    <DocumentCard
-                        fileName="Resume_Nikhil.docx"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="docx"
-                    />
-                    <DocumentCard
-                        fileName="Resume_Nikhil.zip"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="zip"
-                    />
-
-                    <DocumentCard
-                        fileName="Resume_Nikhil.jpg"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="jpg"
-                    />
-
                 </div>
-
             ) : (
-
-                <div className="mt-10 space-y-6">
-
-                    <DocumentList
-                        fileName="Resume_Nikhil.pdf"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="pdf"
-                    />
-                    <DocumentList
-                        fileName="Resume_Nikhil.docx"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="docx"
-                    />
-                    <DocumentList
-                        fileName="Resume_Nikhil.zip"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="zip"
-                    />
-                    <DocumentList
-                        fileName="Resume_Nikhil.jpg"
-                        owner="Nikhil Mishra"
-                        date="July 12, 2025"
-                        fileType="jpg"
-                    />
-
-                </div>
-
+                viewType === 'grid' ? (
+                    <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10">
+                        {starredFiles.map((file) => (
+                            <DocumentCard
+                                key={file._id}
+                                fileName={file.filename}
+                                owner={file.owner.name}
+                                date={new Date(file.createdAt).toDateString()}
+                                fileType={file.format}
+                            />
+                        ))}
+                    </div>
+                ) : (
+                    <div className="mt-10 space-y-6">
+                        {starredFiles.map((file) => (
+                            <DocumentList
+                                key={file._id}
+                                fileName={file.filename}
+                                owner={file.owner.name}
+                                date={new Date(file.createdAt).toDateString()}
+                                fileType={file.format}
+                            />
+                        ))}
+                    </div>
+                )
             )}
-
-
-
         </div>
     );
 };

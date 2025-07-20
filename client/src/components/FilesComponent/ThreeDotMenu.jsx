@@ -1,38 +1,72 @@
-import React, { useState } from 'react';
-import { FiDownload, FiStar, FiTrash, FiEye } from 'react-icons/fi';
-import { FiMoreVertical } from 'react-icons/fi';
+import React, { useState, useEffect, useRef } from 'react';
+import { FiDownload, FiStar, FiTrash, FiEye, FiMoreVertical } from 'react-icons/fi';
+import { ConfirmModal } from '../../components';
+import { downloadFile, toggleStarFile, deleteFile } from '../../utils/fileActions/fileActions'
 
-const ThreeDotMenu = ({ className, ...props }) => { 
+
+const ThreeDotMenu = ({
+    file,
+    onView,
+    isStarred = false,
+    className = '',
+}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isStarred, setIsStarred] = useState(false);
-    
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+    const menuRef = useRef(null);
+
+    const toggleMenu = () => {
+        setIsMenuOpen((prev) => !prev);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        if (isMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isMenuOpen]);
+
     const handleView = () => {
-        alert('View option clicked');
-        // Add functionality for viewing the document
+        if (onView) onView();
+        console.log(file);
+        
+        setIsMenuOpen(false);
     };
 
     const handleDownload = () => {
-        alert('Download option clicked');
-        // Add functionality for downloading the document
+        downloadFile(file);
+        setIsMenuOpen(false);
     };
 
     const handleStarred = () => {
-        setIsStarred(!isStarred);
-        alert(isStarred ? 'Removed from starred' : 'Added to starred');
+        toggleStarFile(!isStarred);
+        setIsMenuOpen(false);
     };
 
-    const handleDelete = () => {
-        alert('Delete option clicked');
-        // Add functionality for deleting the document
+    const handleDeleteClick = () => {
+        deleteFile(true);
+        setIsMenuOpen(false);
     };
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const handleConfirmDelete = () => {
+        onDelete();
+        setIsConfirmOpen(false);
+    };
+
+    const handleCancelDelete = () => {
+        setIsConfirmOpen(false);
     };
 
     return (
-        <div className="">
-
+        <div ref={menuRef}>
             <button
                 className={`p-2 text-zinc-500 hover:text-gray-600 hover:bg-gray-200 rounded-full transition ${className}`}
                 aria-label="More options"
@@ -67,7 +101,7 @@ const ThreeDotMenu = ({ className, ...props }) => {
                         </li>
                         <li
                             className="flex items-center px-4 py-2 hover:bg-red-100 cursor-pointer text-red-500"
-                            onClick={handleDelete}
+                            onClick={handleDeleteClick}
                         >
                             <FiTrash size={16} className="mr-3" />
                             Delete
@@ -75,6 +109,14 @@ const ThreeDotMenu = ({ className, ...props }) => {
                     </ul>
                 </div>
             )}
+
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                title="Confirm Delete"
+                message="Are you sure you want to delete this file? This action cannot be undone."
+                onConfirm={handleConfirmDelete}
+                onCancel={handleCancelDelete}
+            />
         </div>
     );
 };

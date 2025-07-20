@@ -45,7 +45,7 @@ const getFileIconInfo = (type = '') => {
     }c
 };
 
-const DocumentCard = ({ fileName, owner, date, fileType }) => {
+const DocumentCard = ({ fileName, owner, date, fileType, file, onViewFile  }) => {
     const { icon, gradient } = getFileIconInfo(fileType);
 
     return (
@@ -56,6 +56,8 @@ const DocumentCard = ({ fileName, owner, date, fileType }) => {
                 <ThreeDotMenu
                     className="absolute top-4 right-4 cursor-pointer rounded-md text-zinc-500 hover:text-gray-600 hover:bg-white p-1 transition-colors"
                     aria-label="More options"
+                    file = {file}
+                    onView={() => onViewFile(file)}
                 />
 
                 <div className="flex justify-center items-center">
@@ -78,6 +80,7 @@ const DocumentCard = ({ fileName, owner, date, fileType }) => {
                     <button
                         className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition cursor-pointer"
                         aria-label="Open details"
+                        onClick={() => onViewFile(file)}
                     >
                         <FiChevronRight className="w-4 h-4" />
                     </button>

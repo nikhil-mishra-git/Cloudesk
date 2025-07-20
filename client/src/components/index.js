@@ -7,6 +7,8 @@ import UploadButton from "./MultiUsedComponent/UploadButton";
 import EmptyState from "./MultiUsedComponent/EmptyState";
 import CloudLoader from "./MultiUsedComponent/CloudLoader";
 import PrivateRoute from "./MultiUsedComponent/PrivateRoute";
+import ConfirmModal from "./MultiUsedComponent/ConfirmModel";
+import FilePreviewModal from "./MultiUsedComponent/FilePreviewModal";
 import DocumentCard from "./FilesComponent/DocumentCard";
 import DocumentList from "./FilesComponent/DocumentList";
 import ThreeDotMenu from "./FilesComponent/ThreeDotMenu";
@@ -23,5 +25,7 @@ export {
     DocumentList,
     ThreeDotMenu,
     CloudLoader,
-    PrivateRoute
+    PrivateRoute,
+    ConfirmModal,
+    FilePreviewModal
 }

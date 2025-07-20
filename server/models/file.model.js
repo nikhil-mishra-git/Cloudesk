@@ -37,6 +37,10 @@ const fileSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        starred: {
+            type: Boolean,
+            default: false,
+        },
         sharedWith: [
             {
                 type: mongoose.Schema.Types.ObjectId,
