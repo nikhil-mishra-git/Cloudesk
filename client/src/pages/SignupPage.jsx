@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/Logo/CloudeskLogo.png';
 import axiosInstance from '../utils/axios/axiosInstance'
 import { useNavigate } from 'react-router-dom';
 import { authLogin } from '../app/userSlice'
 import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 
 const SignupPage = () => {
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
     try {
@@ -24,16 +26,16 @@ const SignupPage = () => {
         reset();
         navigate('/dashboard');
       }
+      toast.success("Signup Successful")
 
     } catch (error) {
-      console.log(error);
-      alert(error.response?.data?.message || "Signup failed");
+      toast.error(error.response?.data?.message || "Signup failed");
     }
 
   };
 
   const handleGoogleSignup = () => {
-    alert('Redirecting to Google Auth...');
+    toast.error("Google Authentication is Not Enabled")
   };
 
   return (
@@ -91,18 +93,28 @@ const SignupPage = () => {
           />
           {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
 
-          <input
-            type="password"
-            placeholder="Password"
-            {...register('password', {
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters'
-              }
-            })}
-            className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-1 focus:ring-zinc-800 placeholder-gray-500 text-sm"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              })}
+              className="w-full border border-gray-300 rounded-md px-4 py-3 pr-10 focus:outline-none focus:ring-1 focus:ring-zinc-800 placeholder-gray-500 text-sm"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+              tabIndex={-1}
+            >
+              {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+            </button>
+          </div>
           {errors.password && <p className="text-xs text-red-500">{errors.password.message}</p>}
 
           <button

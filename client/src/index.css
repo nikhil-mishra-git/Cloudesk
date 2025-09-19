@@ -15,6 +15,18 @@ body {
   transform: rotate(180deg);
 }
 
+.custom-shape-divider-bottom-1758285580 svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 163px;
+    transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1758285580 .shape-fill {
+    fill: #154CE8;
+}
+
 .custom-shape-divider-bottom-1752691034 svg {
   position: relative;
   display: block;

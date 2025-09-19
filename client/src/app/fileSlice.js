@@ -19,9 +19,16 @@ const fileSlice = createSlice({
         },
         clearFiles: (state) => {
             state.files = [];
-        }
+        },
+        updateFile: (state, action) => {
+            const updatedFile = action.payload;
+            const index = state.files.findIndex(file => file.id === updatedFile.id);
+            if (index !== -1) {
+                state.files[index] = updatedFile; 
+            }
+        },
     },
 });
 
-export const { addFile, deleteFile, setFiles, clearFiles } = fileSlice.actions;
+export const { addFile, deleteFile, setFiles, clearFiles, updateFile } = fileSlice.actions;
 export default fileSlice.reducer;

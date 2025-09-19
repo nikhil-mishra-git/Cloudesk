@@ -3,6 +3,7 @@ import DashboardSidebar from './DashboardComponent/DashboardSidebar'
 import DashboardTop from './DashboardComponent/DashboardTop'
 import MyFiles from "./DashboardComponent/MyFiles";
 import StarredFiles from "./DashboardComponent/StarredFiles";
+import TrashFiles from "./DashboardComponent/TrashFiles";
 import UploadButton from "./MultiUsedComponent/UploadButton";
 import EmptyState from "./MultiUsedComponent/EmptyState";
 import CloudLoader from "./MultiUsedComponent/CloudLoader";
@@ -27,5 +28,6 @@ export {
     CloudLoader,
     PrivateRoute,
     ConfirmModal,
-    FilePreviewModal
+    FilePreviewModal,
+    TrashFiles
 }

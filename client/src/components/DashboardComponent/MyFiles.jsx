@@ -2,18 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FiGrid, FiList } from 'react-icons/fi';
 import { UploadButton, EmptyState, DocumentCard, DocumentList } from '../../components';
-import axiosInstance from '../../utils/axios/axiosInstance';
-import { setFiles } from '../../app/fileSlice';
 import { useOutletContext } from 'react-router-dom';
-
+import { refreshFiles } from '../../utils/fileActions/fileActions'
 
 const MyFiles = ({ title = 'Documents', onViewChange }) => {
   const dispatch = useDispatch();
   const [viewType, setViewType] = useState('grid');
-  const { onViewFile } = useOutletContext(); 
+  const { onViewFile } = useOutletContext();
 
   const user = useSelector((state) => state.user.userData);
-  const files = useSelector((state) => state.file.files);
+  const allFiles = useSelector((state) => state.file.files);
+  const files = allFiles.filter(file => !file.deleted);
 
   const handleViewChange = (type) => {
     setViewType(type);
@@ -21,27 +20,16 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
   };
 
   useEffect(() => {
-    const fetchUserFiles = async () => {
-      try {
-        const res = await axiosInstance.get('/files');
-        dispatch(setFiles(res.data.files));
-      } catch (err) {
-        console.error('Failed to fetch files:', err.message);
-      }
-    };
-
-    fetchUserFiles();
+    refreshFiles(dispatch);
   }, [dispatch]);
 
   return (
     <div className="p-4 md:p-10">
-
-
       <div className="w-full bg-white rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl tracking-wide font-semibold text-zinc-600">
             Hello, <br />
-            <span className="text-zinc-700 text-4xl">{user.name}</span> 👋
+            <span className="text-zinc-700 text-4xl">{user?.name}</span> 👋
           </h2>
         </div>
         <UploadButton className="bg-gradient-to-r from-blue-700 to-blue-500 text-white" />
@@ -60,7 +48,6 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
           >
             <FiGrid size={18} />
           </button>
-
           <button
             onClick={() => handleViewChange('list')}
             className={`p-3 rounded-r-md transition cursor-pointer ${viewType === 'list'
@@ -79,23 +66,20 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
           <EmptyState message="No files found. Upload to get started!" />
         </div>
       ) : viewType === 'grid' ? (
-
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {files.map((file) => (
             <DocumentCard
               key={file._id}
               fileName={file.filename}
-              owner={user.name}
+              owner={user?.name}
               date={new Date(file.createdAt).toDateString()}
               fileType={file.format}
               file={file}
-              onViewFile={onViewFile} 
+              onViewFile={onViewFile}
             />
           ))}
         </div>
-
       ) : (
-
         <div className="mt-10 space-y-6">
           {files.map((file) => (
             <DocumentList
@@ -105,7 +89,7 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
               date={new Date(file.createdAt).toDateString()}
               fileType={file.format}
               file={file}
-              onViewFile={onViewFile} 
+              onViewFile={onViewFile}
             />
           ))}
         </div>

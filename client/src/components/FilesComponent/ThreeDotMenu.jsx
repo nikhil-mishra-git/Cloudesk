@@ -1,22 +1,39 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FiDownload, FiStar, FiTrash, FiEye, FiMoreVertical } from 'react-icons/fi';
+import {
+    FiDownload,
+    FiStar,
+    FiTrash,
+    FiEye,
+    FiMoreVertical,
+    FiCornerUpLeft
+} from 'react-icons/fi';
 import { ConfirmModal } from '../../components';
-import { downloadFile, toggleStarFile, deleteFile } from '../../utils/fileActions/fileActions'
+import {
+    downloadFile,
+    toggleStarFile,
+    deleteFile,
+    restoreFile,
+    finalDelete,
+    refreshFiles
+} from '../../utils/fileActions/fileActions';
+import toast from 'react-hot-toast';
+import { useSelector, useDispatch } from 'react-redux';
+import api from '../../utils/axios/api';
 
-
-const ThreeDotMenu = ({
-    file,
-    onView,
-    isStarred = false,
-    className = '',
-}) => {
+const ThreeDotMenu = ({ file, onView, className = '' }) => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [starred, setStarred] = useState(file.starred);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const menuRef = useRef(null);
+    const trashed = file.deleted;
+    const dispatch = useDispatch()
 
-    const toggleMenu = () => {
-        setIsMenuOpen((prev) => !prev);
-    };
+    const [confirmProps, setConfirmProps] = useState({
+        title: '',
+        message: '',
+        confirmLabel: '',
+        onConfirm: () => { },
+    });
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -34,35 +51,102 @@ const ThreeDotMenu = ({
         };
     }, [isMenuOpen]);
 
+    const toggleMenu = () => setIsMenuOpen((prev) => !prev);
+
     const handleView = () => {
-        if (onView) onView();
-        console.log(file);
-        
+        onView?.(file.secure_url);
         setIsMenuOpen(false);
     };
 
     const handleDownload = () => {
-        downloadFile(file);
+        try {
+            downloadFile(file);
+            toast.success('File downloaded successfully!');
+        } catch (err) {
+            toast.error('Failed to download file.');
+            console.error(err);
+        }
         setIsMenuOpen(false);
     };
 
-    const handleStarred = () => {
-        toggleStarFile(!isStarred);
+    const handleStarred = async () => {
+        const newStarred = !starred;
+        try {
+            const updatedStarred = await toggleStarFile(file._id, newStarred);
+            setStarred(updatedStarred);
+            toast.success(`File ${newStarred ? 'starred' : 'unstarred'} successfully!`);
+            await refreshFiles(dispatch)
+        } catch (err) {
+            toast.error('Failed to toggle star status.');
+            console.error(err);
+        }
         setIsMenuOpen(false);
     };
 
-    const handleDeleteClick = () => {
-        deleteFile(true);
+    const handleSoftDelete = () => {
+        setConfirmProps({
+            title: 'Move to Trash?',
+            message: 'Are you sure you want to move this file to trash?',
+            confirmLabel: 'Move to Trash',
+            onConfirm: async () => {
+                try {
+                    await deleteFile(file._id);
+                    toast.success("File moved to trash")
+                    await refreshFiles(dispatch)
+                } catch (err) {
+                    console.error(err);
+                    toast.error("Failed to move file")
+                }
+            },
+        });
+        setIsConfirmOpen(true);
         setIsMenuOpen(false);
     };
 
-    const handleConfirmDelete = () => {
-        onDelete();
-        setIsConfirmOpen(false);
+    const handleRestore = () => {
+        setConfirmProps({
+            title: 'Restore File?',
+            message: 'Are you sure you want to restore this file?',
+            confirmLabel: 'Restore File',
+            className: 'bg-green-600 hover:bg-green-700',
+            onConfirm: async () => {
+                try {
+                    await restoreFile(file._id);
+                    await refreshFiles(dispatch)
+                    toast.success("File restored")
+                } catch (err) {
+                    console.error(err);
+                    toast.error("Failed to restore")
+                }
+            },
+        });
+        setIsConfirmOpen(true);
+        setIsMenuOpen(false);
     };
 
-    const handleCancelDelete = () => {
-        setIsConfirmOpen(false);
+    const handlePermanentDelete = () => {
+        setConfirmProps({
+            title: 'Delete Permanently?',
+            message: 'Do you want to permanently delete this file?',
+            confirmLabel: 'Delete',
+            onConfirm: async () => {
+                try {
+                    await toast.promise(
+                        finalDelete(file._id),
+                        {
+                            loading: 'Deleting file...',
+                            success: 'File deleted successfully!',
+                            error: 'Failed to delete file.',
+                        }
+                    );
+                    await refreshFiles(dispatch);
+                } catch (err) {
+                    console.error(err);
+                }
+            },
+        });
+        setIsConfirmOpen(true);
+        setIsMenuOpen(false);
     };
 
     return (
@@ -78,33 +162,34 @@ const ThreeDotMenu = ({
             {isMenuOpen && (
                 <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-48 text-sm text-gray-700 z-10 p-3">
                     <ul className="space-y-2">
-                        <li
-                            className="flex items-center px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer"
-                            onClick={handleView}
-                        >
+                        <li className="flex items-center px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer" onClick={handleView}>
                             <FiEye size={16} className="mr-3" />
                             View
                         </li>
-                        <li
-                            className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={handleDownload}
-                        >
-                            <FiDownload size={16} className="mr-3" />
-                            Download
-                        </li>
-                        <li
-                            className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                            onClick={handleStarred}
-                        >
-                            <FiStar size={16} className="mr-3" color={isStarred ? 'gold' : 'gray'} />
-                            {isStarred ? 'Unstar' : 'Star'}
-                        </li>
+                        {!trashed && (
+                            <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleDownload}>
+                                <FiDownload size={16} className="mr-3" />
+                                Download
+                            </li>
+                        )}
+                        {!trashed && (
+                            <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleStarred}>
+                                <FiStar size={16} className="mr-3" color={starred ? 'gold' : 'gray'} />
+                                {starred ? 'Unstar' : 'Star'}
+                            </li>
+                        )}
+                        {trashed && (
+                            <li className="flex items-center px-4 py-2 hover:bg-green-100 cursor-pointer text-green-600" onClick={handleRestore}>
+                                <FiCornerUpLeft size={16} className="mr-3" />
+                                Restore
+                            </li>
+                        )}
                         <li
                             className="flex items-center px-4 py-2 hover:bg-red-100 cursor-pointer text-red-500"
-                            onClick={handleDeleteClick}
+                            onClick={trashed ? handlePermanentDelete : handleSoftDelete}
                         >
                             <FiTrash size={16} className="mr-3" />
-                            Delete
+                            {trashed ? "Delete" : "Trash"}
                         </li>
                     </ul>
                 </div>
@@ -112,10 +197,16 @@ const ThreeDotMenu = ({
 
             <ConfirmModal
                 isOpen={isConfirmOpen}
-                title="Confirm Delete"
-                message="Are you sure you want to delete this file? This action cannot be undone."
-                onConfirm={handleConfirmDelete}
-                onCancel={handleCancelDelete}
+                title={confirmProps.title}
+                message={confirmProps.message}
+                confirmLabel={confirmProps.confirmLabel}
+                cancelLabel="Cancel"
+                onConfirm={() => {
+                    confirmProps.onConfirm();
+                    setIsConfirmOpen(false);
+                }}
+                className={confirmProps.className}
+                onCancel={() => setIsConfirmOpen(false)}
             />
         </div>
     );

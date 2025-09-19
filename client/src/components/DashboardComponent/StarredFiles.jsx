@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { FiGrid, FiList } from 'react-icons/fi';
+import { useOutletContext } from 'react-router-dom';
 import { EmptyState, DocumentCard, DocumentList } from '../../components';
 
 const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
     const [viewType, setViewType] = useState('grid');
-
     const allFiles = useSelector((state) => state.file.files);
     const starredFiles = allFiles.filter(file => file.starred);
+    const user = useSelector((state) => state.user.userData);
+    const { onViewFile } = useOutletContext();
 
     const handleViewChange = (type) => {
         setViewType(type);
@@ -18,7 +20,6 @@ const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
         <div className="p-4 md:p-10">
             <div className="flex items-center justify-between">
                 <h3 className="text-2xl font-semibold text-zinc-700">{title}</h3>
-
                 <div className="flex items-center bg-gray-100 gap-2 font-semibold rounded-md">
                     <button
                         onClick={() => handleViewChange('grid')}
@@ -30,7 +31,6 @@ const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
                     >
                         <FiGrid size={18} />
                     </button>
-
                     <button
                         onClick={() => handleViewChange('list')}
                         className={`p-3 rounded-r-md transition cursor-pointer ${viewType === 'list'
@@ -44,40 +44,38 @@ const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
                 </div>
             </div>
 
-            {/* 🔄 Check for Empty State */}
             {starredFiles.length === 0 ? (
                 <div className="mt-16">
-                    <EmptyState
-                        title="No Starred Files"
-                        subtitle="Files you mark as important will show up here."
-                    />
+                    <EmptyState title="No Starred Files" subtitle="Files you mark as important will show up here." />
+                </div>
+            ) : viewType === 'grid' ? (
+                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {starredFiles.map((file) => (
+                        <DocumentCard
+                            key={file._id}
+                            fileName={file.filename}
+                            owner={user.name}
+                            date={new Date(file.createdAt).toDateString()}
+                            fileType={file.format}
+                            file={file}
+                            onViewFile={onViewFile}
+                        />
+                    ))}
                 </div>
             ) : (
-                viewType === 'grid' ? (
-                    <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-10">
-                        {starredFiles.map((file) => (
-                            <DocumentCard
-                                key={file._id}
-                                fileName={file.filename}
-                                owner={file.owner.name}
-                                date={new Date(file.createdAt).toDateString()}
-                                fileType={file.format}
-                            />
-                        ))}
-                    </div>
-                ) : (
-                    <div className="mt-10 space-y-6">
-                        {starredFiles.map((file) => (
-                            <DocumentList
-                                key={file._id}
-                                fileName={file.filename}
-                                owner={file.owner.name}
-                                date={new Date(file.createdAt).toDateString()}
-                                fileType={file.format}
-                            />
-                        ))}
-                    </div>
-                )
+                <div className="mt-10 space-y-6">
+                    {starredFiles.map((file) => (
+                        <DocumentList
+                            key={file._id}
+                            fileName={file.filename}
+                            owner={user.name}
+                            date={new Date(file.createdAt).toDateString()}
+                            fileType={file.format}
+                            file={file}
+                            onViewFile={onViewFile}
+                        />
+                    ))}
+                </div>
             )}
         </div>
     );

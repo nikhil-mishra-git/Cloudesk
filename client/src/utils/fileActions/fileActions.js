@@ -1,21 +1,27 @@
-import axiosInstance from '../axios/axiosInstance';
-import { FilePreviewModal } from '../../components'
+import api from '../axios/api';
+import { setFiles } from '../../app/fileSlice';
 
 
-export const downloadFile = (file) => {
-    if (!file || !file.secure_url) {
-        console.error("Invalid file object");
-        return;
+// Refresh files and dispatch to Redux
+export const refreshFiles = async (dispatch) => {
+    try {
+        const res = await api.files.getAll();
+        dispatch(setFiles(res.data.files));
+    } catch (err) {
+        console.error('Failed to refresh files:', err.message);
     }
+};
+
+// Download file
+export const downloadFile = (file) => {
+    if (!file || !file.secure_url) return;
 
     const downloadUrl = file.secure_url.replace('/upload/', '/upload/fl_attachment/');
-
     const link = document.createElement("a");
     link.href = downloadUrl;
+
     const extension = file.format || file.secure_url.split('.').pop();
-    const safeFilename = file.filename
-        ? `${file.filename}.${extension}`
-        : `downloaded-file.${extension}`;
+    const safeFilename = file.filename ? `${file.filename}.${extension}` : `downloaded-file.${extension}`;
 
     link.download = safeFilename;
     link.target = "_blank";
@@ -24,30 +30,43 @@ export const downloadFile = (file) => {
     document.body.removeChild(link);
 };
 
+// Toggle starred
 export const toggleStarFile = async (fileId, currentStarred) => {
     try {
-        const response = await axiosInstance.post(`/files/star/${fileId}`, {
-            starred: !currentStarred,
-        });
-        alert(response.data.message || (currentStarred ? 'Unstarred' : 'Starred'));
-        return !currentStarred; // return new starred status
+        const response = await api.files.toggleStar(fileId, currentStarred);
+        return response.data.file.starred;
     } catch (error) {
-        alert('Failed to update star status');
-        console.error(error);
-        return currentStarred; // no change on error
+        console.error('Toggle star error:', error.response?.data || error.message);
+        throw error;
     }
 };
 
+// Move to trash
 export const deleteFile = async (fileId) => {
     try {
-        if (!window.confirm('Are you sure you want to delete this file?')) return false;
+        const response = await api.files.delete(fileId);
+        return response.data.message || 'File moved to trash';
+    } catch (error) {
+        throw error;
+    }
+};
 
-        const response = await axiosInstance.delete(`/files/${fileId}`);
-        alert(response.data.message || 'File deleted successfully');
+// Restore from trash
+export const restoreFile = async (fileId) => {
+    try {
+        await api.files.restore(fileId);
         return true;
     } catch (error) {
-        alert('Failed to delete file');
-        console.error(error);
-        return false;
+        throw error;
+    }
+};
+
+// Permanently delete file
+export const finalDelete = async (fileId) => {
+    try {
+        const response = await api.files.permanentDelete(fileId);
+        return response.data.message || 'File permanently deleted';
+    } catch (error) {
+        throw error;
     }
 };

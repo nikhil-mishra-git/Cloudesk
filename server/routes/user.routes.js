@@ -67,9 +67,10 @@ router.post('/login', async (req, res) => {
             message: 'Login successful',
             user: {
                 id: user._id,
+                url: user.avatar.url,
                 name: user.name,
                 email: user.email,
-                userImage: user.userImage,
+                avatar: user.avatar.url,
                 token: token,
             },
         });
@@ -117,10 +118,11 @@ router.patch('/avatar', authMiddleware, async (req, res) => {
         }
 
         const result = await cloudinary.uploader.upload(avatarFile.tempFilePath, {
-            folder: 'avatars',
-            width: 150,
-            height: 150,
-            crop: 'thumb',
+            folder: 'Cloudesk/avatars',
+            public_id: `user_${userId}_${Date.now()}`,
+            transformation: [
+                { width: 150, height: 150, crop: 'thumb', gravity: 'face' }
+            ],
         });
 
         user.avatar = {

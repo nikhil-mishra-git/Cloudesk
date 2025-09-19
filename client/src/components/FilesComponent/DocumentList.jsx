@@ -11,7 +11,6 @@ import {
 import { FaFileAlt } from 'react-icons/fa';
 import { ThreeDotMenu } from '../index'
 
-// File Icon Box with Gradient Background
 const FileIconBox = ({ icon, gradient }) => (
     <div
         className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md`}
@@ -20,33 +19,33 @@ const FileIconBox = ({ icon, gradient }) => (
     </div>
 );
 
-// File Type → Icon + Gradient Mapper
 const getFileIconInfo = (type = '') => {
     switch (type.toLowerCase()) {
-        case 'pdf':
+        case '.pdf':
             return { icon: <BsFiletypePdf size={24} />, gradient: 'from-red-500 to-red-700' };
-        case 'doc':
-        case 'docx':
+        case '.doc':
+        case '.docx':
             return { icon: <BsFiletypeDoc size={24} />, gradient: 'from-blue-500 to-blue-700' };
-        case 'ppt':
-        case 'pptx':
+        case '.ppt':
+        case '.pptx':
             return { icon: <BsFiletypePptx size={24} />, gradient: 'from-orange-500 to-orange-700' };
-        case 'jpg':
-        case 'jpeg':
+        case '.jpg':
+        case '.jpeg':
             return { icon: <BsFiletypeJpg size={24} />, gradient: 'from-green-500 to-green-700' };
-        case 'png':
+        case '.png':
             return { icon: <BsFiletypePng size={24} />, gradient: 'from-orange-500 to-orange-700' };
-        case 'txt':
+        case '.txt':
             return { icon: <BsFiletypeTxt size={24} />, gradient: 'from-gray-500 to-gray-700' };
-        case 'zip':
-        case 'rnf':
+        case '.zip':
+        case '.rnf':
             return { icon: <BsFileEarmarkZip size={24} />, gradient: 'from-green-500 to-emerald-700' };
         default:
             return { icon: <FaFileAlt size={24} />, gradient: 'from-zinc-400 to-zinc-600' };
     }
 };
 
-const DocumentList = ({ fileName, owner, date, fileType }) => {
+
+const DocumentList = ({ fileName, owner, date, fileType, file, onViewFile }) => {
     const { icon, gradient } = getFileIconInfo(fileType);
 
     return (
@@ -64,9 +63,14 @@ const DocumentList = ({ fileName, owner, date, fileType }) => {
             <div className=" text-sm text-gray-500 truncate">{owner}</div>
 
             <div className='relative'>
-                <ThreeDotMenu />
+                <ThreeDotMenu
+                    className=" cursor-pointer rounded-md text-zinc-500 hover:text-gray-600 hover:bg-white p-1 transition-colors"
+                    aria-label="More options"
+                    file={file}
+                    onView={() => onViewFile(file)}
+                />
             </div>
-            
+
         </div>
     );
 };

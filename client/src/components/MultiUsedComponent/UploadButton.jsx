@@ -4,8 +4,9 @@ import {
     FiVideo, FiFile, FiUpload
 } from 'react-icons/fi';
 import { useDispatch } from 'react-redux';
-import axiosInstance from '../../utils/axios/axiosInstance';
-import { addFile } from '../../app/fileSlice';
+import api from '../../utils/axios/api';
+import { refreshFiles } from '../../utils/fileActions/fileActions';
+import toast from 'react-hot-toast';
 
 const getFileIcon = (extension) => {
     const ext = extension.toLowerCase();
@@ -59,14 +60,12 @@ const UploadButton = ({ className = '' }) => {
         const formData = new FormData();
         formData.append('file', fileData.file, newFileName);
 
+        setUploading(true);
         try {
-            setUploading(true);
-            const res = await axiosInstance.post('/files/upload', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
-
-            dispatch(addFile(res.data.file));
+            await api.files.upload(formData)
+            await refreshFiles(dispatch)
             closeModal();
+            toast.success("File uploded successfully")
         } catch (err) {
             console.error('Upload failed:', err);
             alert(err?.response?.data?.message || 'Upload failed');
@@ -88,6 +87,7 @@ const UploadButton = ({ className = '' }) => {
 
             <input
                 type="file"
+                accept=".pdf,.doc,.docx,.txt,.zip,.rar,image/*"
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 style={{ display: 'none' }}

@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiArrowLeft } from 'react-icons/fi';
+import { FiArrowLeft, FiEye, FiEyeOff } from 'react-icons/fi';
 import Logo from '../assets/Logo/CloudeskLogo.png';
 import { CloudLoader } from '../components';
 import { useDispatch } from 'react-redux';
 import axiosInstance from '../utils/axios/axiosInstance';
 import { authLogin } from '../app/userSlice';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
 
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate()
   const dispatch = useDispatch();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -37,15 +39,15 @@ const LoginPage = () => {
         reset();
         navigate('/dashboard');
       }
+      toast.success("Login Successful")
     } catch (error) {
       console.error(error);
-      alert(error.response?.data?.message || 'Login failed');
+      toast.error(error.response?.data?.message || 'Login failed');
     }
   };
 
   const handleGoogleLogin = () => {
-    alert('Redirecting to Google Auth...');
-    // Google OAuth logic
+    toast.error("Google Authentication is Not Enabled")
   };
 
   return (
@@ -114,19 +116,30 @@ const LoginPage = () => {
           {errors.email && (
             <p className="text-xs text-red-500">{errors.email.message}</p>
           )}
+<div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Password"
+              {...register('password', {
+                required: 'Password is required',
+                minLength: {
+                  value: 6,
+                  message: 'Password must be at least 6 characters',
+                },
+              })}
+              className="w-full border border-gray-300 rounded-md px-4 py-3 pr-10 focus:outline-none focus:ring-1 focus:ring-zinc-800 placeholder-gray-500 text-sm"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700"
+              tabIndex={-1}
+            >
+              {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+            </button>
+          </div>
+          
 
-          <input
-            type="password"
-            placeholder="Password"
-            {...register('password', {
-              required: 'Password is required',
-              minLength: {
-                value: 6,
-                message: 'Password must be at least 6 characters',
-              },
-            })}
-            className="w-full border border-gray-300 rounded-md px-4 py-3 focus:outline-none focus:ring-1 focus:ring-zinc-800 placeholder-gray-500 text-sm"
-          />
           {errors.password && (
             <p className="text-xs text-red-500">{errors.password.message}</p>
           )}
@@ -134,7 +147,7 @@ const LoginPage = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-gradient-to-r from-blue-700 to-blue-500 text-white font-medium py-3 rounded-md text-sm transition disabled:opacity-70"
+            className="w-full bg-gradient-to-r cursor-pointer from-blue-700 to-blue-500 text-white font-medium py-3 rounded-md text-sm transition disabled:opacity-70"
           >
             {isSubmitting ? 'Logging in...' : 'Login'}
           </button>

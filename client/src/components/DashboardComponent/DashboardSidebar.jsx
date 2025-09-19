@@ -48,7 +48,7 @@ const DashboardSidebar = () => {
                                 to={item.to}
                                 end={isEnd}
                                 className={({ isActive }) => {
-                                    return `flex items-center gap-3 w-full px-5 py-3 rounded-lg text-sm font-semibold transition duration-200 ease-in-out ${isActive
+                                    return `flex items-center gap-3 w-full px-5 py-4 rounded-lg text-sm font-semibold transition duration-200 ease-in-out ${isActive
                                         ? 'bg-gradient-to-r from-blue-700 to-blue-500 text-white shadow'
                                         : 'text-gray-700 hover:bg-gray-100'
                                         } focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500`

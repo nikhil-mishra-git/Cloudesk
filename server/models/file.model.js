@@ -9,7 +9,6 @@ const fileSchema = new mongoose.Schema(
         },
         format: {
             type: String,
-            required: true,
         },
         url: {
             type: String,
@@ -53,7 +52,7 @@ const fileSchema = new mongoose.Schema(
         },
     },
     {
-        timestamps: true, // adds createdAt and updatedAt
+        timestamps: true, 
     }
 );
 
