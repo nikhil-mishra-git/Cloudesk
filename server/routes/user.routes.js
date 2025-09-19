@@ -25,8 +25,8 @@ router.post('/signup', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: isProduction,
-            sameSite: isProduction ? 'none' : 'lax',
+            secure: true,
+            sameSite: "None"
         });
 
         res.status(201).json({
@@ -59,8 +59,8 @@ router.post('/login', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: isProduction,
-            sameSite: isProduction ? 'none' : 'lax',
+            secure: true,
+            sameSite: "None"
         });
 
         res.status(200).json({
