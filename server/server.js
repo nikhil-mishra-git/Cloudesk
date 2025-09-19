@@ -13,10 +13,13 @@ connectDB();
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+const allowedOrigin = ["http://localhost:5173", "https://cloudesk.vercel.app"];
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: allowedOrigin,
     credentials: true
-}));
+}))
+
 app.use(fileUpload({
     useTempFiles: true,
     tempFileDir: '/tmp/',
