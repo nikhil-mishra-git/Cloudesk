@@ -79,10 +79,10 @@ const UploadButton = ({ className = '' }) => {
             <button
                 type="button"
                 onClick={handleButtonClick}
-                className={`flex items-center gap-3 px-5 py-4 rounded-lg bg-blue-100 text-blue-700 font-semibold text-sm hover:bg-blue-200 transition cursor-pointer ${className}`}
+                className={`flex items-center gap-3 px-3 md:px-5 py-3 md:py-4 rounded-lg bg-blue-100 text-blue-700 font-semibold text-sm hover:bg-blue-200 transition cursor-pointer ${className}`}
             >
                 <FiUploadCloud className="text-lg" />
-                <span>Upload File</span>
+                <span className='hidden md:block'>Upload File</span>
             </button>
 
             <input

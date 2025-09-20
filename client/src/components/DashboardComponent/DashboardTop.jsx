@@ -57,17 +57,17 @@ const DashboardTop = () => {
 
 
     return (
-        <div className='w-full top-0 sticky flex items-center justify-between px-3 md:px-8 py-5 gap-5'>
-            <img src={Logo} alt="Cloudesk" className='h-6 md:h-8 w-auto' />
+        <div className='w-full top-0 sticky flex items-center justify-between px-4 md:px-8 py-5 gap-5'>
+            <img src={Logo} alt="Cloudesk" className='h-5 md:h-8 w-auto' />
 
             <div className='flex items-center gap-4'>
                 {/* Search bar */}
                 <div className="relative flex-grow w-full max-w-100">
-                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-lg" />
+                    <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm md:text-lg" />
                     <input
                         type="text"
                         placeholder="Search files..."
-                        className="w-full pl-10 pr-4 py-3 rounded-md bg-gray-50 border border-gray-200 text-l outline-none transition-all"
+                        className="w-full pl-8 md:pl-10 pr-4 py-3 rounded-md bg-gray-50 border border-gray-200 text-sm md:text-l outline-none transition-all"
                     />
                 </div>
 
@@ -75,7 +75,7 @@ const DashboardTop = () => {
                 <div className="relative flex-shrink-0">
                     <button
                         onClick={toggleMenu}
-                        className="w-10 h-10 rounded-full overflow-hidden border-2 border-zinc-500"
+                        className="w-8 md:w-10 h-8 md:h-10 rounded-full overflow-hidden border-2 border-zinc-500"
                     >
                         <img
                             src={user?.userImage || Avtar}
@@ -85,7 +85,7 @@ const DashboardTop = () => {
                     </button>
 
                     <div
-                        className={`absolute right-0 mt-3 w-72 bg-white p-6 border border-gray-100 rounded-xl shadow-xl z-50 transition-all duration-300 transform origin-top-right ${isMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}
+                        className={`absolute right-0 mt-3 w-52 md:w-72 bg-white p-6 border border-gray-100 rounded-xl shadow-xl z-50 transition-all duration-300 transform origin-top-right ${isMenuOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'}`}
                     >
                         {/* Avatar display and upload */}
                         <div className="relative p-4 border-b border-gray-100 flex justify-center">

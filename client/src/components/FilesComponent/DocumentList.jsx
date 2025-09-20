@@ -13,7 +13,7 @@ import { ThreeDotMenu } from '../index'
 
 const FileIconBox = ({ icon, gradient }) => (
     <div
-        className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md`}
+        className={`w-8 md:w-12 h-8 md:h-12 p-2 rounded-md md:rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white shadow-md`}
     >
         {icon}
     </div>
@@ -49,18 +49,25 @@ const DocumentList = ({ fileName, owner, date, fileType, file, onViewFile }) => 
     const { icon, gradient } = getFileIconInfo(fileType);
 
     return (
-        <div className="flex items-center space-x-6 bg-white rounded-lg shadow p-4 mb-4">
+        <div className="flex items-center space-x-4 bg-white rounded-lg shadow p-1.5 md:p-4 mb-4">
 
             <FileIconBox icon={icon} gradient={gradient} />
 
             <div className="flex-1">
-                <h3 className="text-base font-semibold text-gray-800">{fileName}</h3>
-                <div className="flex justify-between items-center text-xs text-gray-500 mt-1">
+                <h3 className="block md:hidden text-xs font-semibold text-gray-800">
+                    {fileName.length > 8 ? fileName.slice(0, 8) + '...' : fileName}
+                </h3>
+
+                {/* Full name on medium and larger screens */}
+                <h3 className="hidden md:block text-base font-semibold text-gray-800">
+                    {fileName}
+                </h3>
+                <div className="flex justify-between items-center text-[9px] md:text-xs text-gray-500 mt-1">
                     <span className="truncate">{date}</span>
                 </div>
             </div>
 
-            <div className=" text-sm text-gray-500 truncate">{owner}</div>
+            <div className="hidden md:block text-sm text-gray-500 truncate">{owner}</div>
 
             <div className='relative'>
                 <ThreeDotMenu

@@ -22,7 +22,7 @@ const DashboardPage = () => {
       </div>
 
       <div
-        className="flex flex-1 bg-[#f1f3f5] gap-8 p-8 overflow-hidden"
+        className="flex flex-1 bg-[#f1f3f5] gap-4 md:gap-8 p-4 md:p-8 overflow-hidden"
         style={{
           borderTopLeftRadius: '40px',
           borderTopRightRadius: '40px'
