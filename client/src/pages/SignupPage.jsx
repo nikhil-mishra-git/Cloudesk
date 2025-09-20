@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FcGoogle } from 'react-icons/fc';
 import { FiArrowLeft, FiEye, FiEyeOff } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
 import Logo from '../assets/Logo/CloudeskLogo.png';
+import { CloudLoader } from '../components';
 import axiosInstance from '../utils/axios/axiosInstance'
 import { useNavigate } from 'react-router-dom';
 import { authLogin } from '../app/userSlice'
@@ -11,10 +12,18 @@ import { useDispatch } from 'react-redux';
 import toast from 'react-hot-toast';
 
 const SignupPage = () => {
+  const [loading, setLoading] = useState(true);
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) return <CloudLoader />;
 
   const onSubmit = async (data) => {
     try {
@@ -44,7 +53,7 @@ const SignupPage = () => {
       {/* Back Button */}
       <Link
         to="/"
-        className="absolute top-12 left-12 flex items-center justify-center w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-lg transition-all duration-300 text-gray-800 hover:bg-white/30"
+        className="absolute z-50 top-4 md:top-12 left-5 md:left-12 flex items-center justify-center w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-lg transition-all duration-300 text-gray-800 hover:bg-white/30"
       >
         <FiArrowLeft className="text-xl" />
       </Link>

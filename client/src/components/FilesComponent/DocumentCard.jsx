@@ -52,7 +52,7 @@ const DocumentCard = ({ fileName, owner, date, fileType, file, onViewFile }) => 
     return (
         <div className="relative bg-white rounded-2xl shadow transition-all duration-300 w-full max-w-sm overflow-hidden group">
 
-            <div className="bg-[#f1f3f5] px-6 py-12 relative">
+            <div className="bg-[#f1f3f5] px-6 py-8 md:py-12 relative">
 
                 <ThreeDotMenu
                     className="absolute top-4 right-2 md:right-4 cursor-pointer rounded-md text-zinc-500 hover:text-gray-600 hover:bg-white p-1 transition-colors"

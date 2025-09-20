@@ -25,7 +25,7 @@ const App = () => {
           dispatch(setFiles(filesRes.data.files));
         }
       } catch (err) {
-        console.log('User not logged in or session expired');
+        
       } finally {
         setLoading(false);
       }

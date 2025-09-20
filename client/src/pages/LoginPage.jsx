@@ -56,7 +56,7 @@ const LoginPage = () => {
       {/* Back Button */}
       <Link
         to="/"
-        className="absolute top-12 left-12 flex items-center justify-center w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-lg transition-all duration-300 text-gray-800 hover:bg-white/30"
+        className="absolute z-50 top-4 md:top-12 left-5 md:left-12 flex items-center justify-center w-11 h-11 rounded-full bg-white/20 backdrop-blur-md border border-white/30 shadow-sm hover:shadow-lg transition-all duration-300 text-gray-800 hover:bg-white/30"
       >
         <FiArrowLeft className="text-xl" />
       </Link>

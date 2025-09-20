@@ -66,7 +66,7 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <main className="relative z-10 flex flex-col items-center justify-start px-4 sm:px-6 pt-12 pb-14 text-center">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-6">
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold text-gray-800 leading-tight mb-6">
           Securely Store, Share & Access <br className="hidden md:block" /> Your Files Anywhere
         </h1>
         <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-2xl mb-10">
@@ -74,23 +74,23 @@ const HomePage = () => {
         </p>
         <Link
           to="/signup"
-          className="flex items-center gap-3 px-8 py-3 text-lg font-semibold bg-gradient-to-r from-blue-700 to-blue-500 text-white rounded-md shadow-lg hover:shadow-2xl transition mb-16"
+          className="flex items-center gap-3 px-4 md:px-8 py-3 text-sm md:text-lg font-semibold bg-gradient-to-r from-blue-700 to-blue-500 text-white rounded-md shadow-lg hover:shadow-2xl transition mb-16"
         >
           Get Started Free
-          <FiArrowRightCircle className="text-2xl" />
+          <FiArrowRightCircle className="text-xl md:text-2xl" />
         </Link>
 
         {/* File Categories */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 mb-16">
+        <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-6 gap-2 md:gap-6 mb-16">
           {fileCategories.map((category) => (
             <div
               key={category.label}
-              className="flex flex-col items-center justify-center p-4 transition duration-300"
+              className="flex flex-col items-center justify-center p-1 md:p-4 transition duration-300"
             >
               <div className="text-3xl sm:text-4xl mb-2 p-4 bg-white/50 border border-white/30 backdrop-blur-md rounded-xl hover:scale-105 transition-transform">
                 {category.icon}
               </div>
-              <p className="text-sm text-black">{category.label}</p>
+              <p className="text-xs md:text-sm text-black">{category.label}</p>
             </div>
           ))}
         </div>
@@ -99,8 +99,8 @@ const HomePage = () => {
         <section className="w-full px-4 sm:px-6">
           <div className="max-w-6xl mx-auto text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">Why Choose Cloudesk?</h2>
-            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
-              We combine privacy, openness, and global flexibility — all with a modern design that puts you in control.
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-2xl mb-10">
+              We combine privacy, openness, and global flexibility , all with a modern design that puts you in control.
             </p>
           </div>
 
