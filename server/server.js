@@ -25,6 +25,9 @@ app.use(fileUpload({
     tempFileDir: '/tmp/',
 }));
 
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'active' });
+});
 app.use('/api/auth', userRoute);
 app.use('/api/files', fileRoute);
 
