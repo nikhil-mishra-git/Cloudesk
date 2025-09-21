@@ -99,7 +99,7 @@ const HomePage = () => {
         <section className="w-full px-4 sm:px-6">
           <div className="max-w-6xl mx-auto text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-4">Why Choose Cloudesk?</h2>
-            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-2xl mb-10">
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl max-w-2xl mb-10 mx-auto">
               We combine privacy, openness, and global flexibility , all with a modern design that puts you in control.
             </p>
           </div>

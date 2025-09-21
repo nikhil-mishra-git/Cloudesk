@@ -6,13 +6,22 @@ import { useOutletContext } from 'react-router-dom';
 import { refreshFiles } from '../../utils/fileActions/fileActions'
 
 const MyFiles = ({ title = 'Documents', onViewChange }) => {
+
   const dispatch = useDispatch();
   const [viewType, setViewType] = useState('grid');
   const { onViewFile } = useOutletContext();
+  const searchQuery = useSelector((state) => state.search.query);
 
   const user = useSelector((state) => state.user.userData);
   const allFiles = useSelector((state) => state.file.files);
   const files = allFiles.filter(file => !file.deleted);
+
+  const filteredFiles = allFiles.filter((file) => {
+    const fileName = file?.filename || '';
+    return !file.deleted && fileName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
+
 
   const handleViewChange = (type) => {
     setViewType(type);
@@ -29,7 +38,7 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
         <div>
           <h2 className="text-sm md:text-2xl tracking-wide font-semibold text-zinc-500">
             Hello, <br />
-            <span className="text-zinc-700 text-2xl md:text-4xl">{user?.name}</span> 
+            <span className="text-zinc-700 text-2xl md:text-4xl">{user?.name}</span>
           </h2>
         </div>
         <UploadButton className="bg-gradient-to-r from-blue-700 to-blue-500 text-white" />
@@ -61,13 +70,13 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
         </div>
       </div>
 
-      {files.length === 0 ? (
+      {filteredFiles.length === 0 ? (
         <div className="mt-10">
           <EmptyState message="No files found. Upload to get started!" />
         </div>
       ) : viewType === 'grid' ? (
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {files.map((file) => (
+          {filteredFiles.map((file) => (
             <DocumentCard
               key={file._id}
               fileName={file.filename}
@@ -81,7 +90,7 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
         </div>
       ) : (
         <div className="mt-10 space-y-6">
-          {files.map((file) => (
+          {filteredFiles.map((file) => (
             <DocumentList
               key={file._id}
               fileName={file.filename}

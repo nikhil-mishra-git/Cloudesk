@@ -6,16 +6,15 @@ import { EmptyState, DocumentCard, DocumentList } from '../../components';
 
 const TrashFiles = ({ title = "Trash Files", onViewChange }) => {
   const [viewType, setViewType] = useState('grid');
-  const [trashFiles, setTrashFiles] = useState([]);
-
   const allFiles = useSelector((state) => state.file.files);
+  const searchQuery = useSelector((state) => state.search.query);
   const user = useSelector((state) => state.user.userData);
   const { onViewFile } = useOutletContext();
 
-  useEffect(() => {
-    const trashed = allFiles.filter(file => file.deleted);
-    setTrashFiles(trashed);
-  }, [allFiles]);
+  const trashFiles = allFiles.filter(file =>
+    file.deleted &&
+    file.filename?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const handleViewChange = (type) => {
     setViewType(type);

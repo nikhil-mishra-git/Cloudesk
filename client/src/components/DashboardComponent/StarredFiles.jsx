@@ -1,15 +1,21 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FiGrid, FiList } from 'react-icons/fi';
 import { useOutletContext } from 'react-router-dom';
 import { EmptyState, DocumentCard, DocumentList } from '../../components';
 
 const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
+
     const [viewType, setViewType] = useState('grid');
     const allFiles = useSelector((state) => state.file.files);
-    const starredFiles = allFiles.filter(file => file.starred);
+    const searchQuery = useSelector((state) => state.search.query);
     const user = useSelector((state) => state.user.userData);
     const { onViewFile } = useOutletContext();
+
+    const starredFiles = allFiles.filter(file =>
+        file.starred &&
+        file.filename?.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     const handleViewChange = (type) => {
         setViewType(type);

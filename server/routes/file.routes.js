@@ -24,9 +24,6 @@ router.post('/upload', authMiddleware, async (req, res) => {
             unique_filename: false,
         });
 
-        console.log(result.url);
-        
-
         const newFile = await fileModel.create({
             filename: file.name,
             format: extension,

@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FiSearch, FiCamera } from 'react-icons/fi';
 import Logo from '../../assets/Logo/CloudeskLogo.png';
 import Avtar from '../../assets/AvtarImage/avtar.png';
 import axiosInstance from '../../utils/axios/axiosInstance';
 import { LogoutButton } from '../index';
 import toast from 'react-hot-toast';
+import { setSearchQuery } from '../../app/searchSlice';
 
 const DashboardTop = () => {
     const [isMenuOpen, setisMenuOpen] = useState(false);
     const [user, setUser] = useState(null);
     const userData = useSelector((state) => state.user.userData);
+    const dispatch = useDispatch();
+    const searchQuery = useSelector((state) => state.search.query);
+
 
     useEffect(() => {
-
         if (userData) {
             setUser({
                 userImage: userData?.avatar?.url,
@@ -41,7 +44,7 @@ const DashboardTop = () => {
                 },
                 withCredentials: true,
             });
-            
+
             if (res?.data?.avatar) {
                 setUser((prev) => ({
                     ...prev,
@@ -55,7 +58,6 @@ const DashboardTop = () => {
         }
     };
 
-
     return (
         <div className='w-full top-0 sticky flex items-center justify-between px-4 md:px-8 py-5 gap-5'>
             <img src={Logo} alt="Cloudesk" className='h-5 md:h-8 w-auto' />
@@ -67,6 +69,8 @@ const DashboardTop = () => {
                     <input
                         type="text"
                         placeholder="Search files..."
+                        value={searchQuery}
+                        onChange={(e) => dispatch(setSearchQuery(e.target.value))}
                         className="w-full pl-8 md:pl-10 pr-4 py-3 rounded-md bg-gray-50 border border-gray-200 text-sm md:text-l outline-none transition-all"
                     />
                 </div>

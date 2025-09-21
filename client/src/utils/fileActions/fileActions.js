@@ -24,7 +24,6 @@ export const downloadFile = (file) => {
     const safeFilename = file.filename ? `${file.filename}.${extension}` : `downloaded-file.${extension}`;
 
     link.download = safeFilename;
-    link.target = "_blank";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
