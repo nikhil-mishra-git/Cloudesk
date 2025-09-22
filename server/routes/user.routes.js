@@ -95,7 +95,7 @@ router.get('/profile', authMiddleware, async (req, res) => {
 router.get('/logout', (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: false,
+        secure: true,
         sameSite: 'None',
     });
     res.status(200).json({ message: 'Logged out successfully' });
