@@ -55,7 +55,7 @@ const StarredFiles = ({ title = "Starred Files", onViewChange }) => {
                     <EmptyState title="No Starred Files" subtitle="Files you mark as important will show up here." />
                 </div>
             ) : viewType === 'grid' ? (
-                <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                     {starredFiles.map((file) => (
                         <DocumentCard
                             key={file._id}

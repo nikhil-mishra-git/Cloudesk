@@ -160,7 +160,7 @@ const ThreeDotMenu = ({ file, onView, className = '' }) => {
             </button>
 
             {isMenuOpen && (
-                <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-48 text-sm text-gray-700 z-10 p-3">
+                <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-38 sm:w-48 text-[13px] sm:text-sm text-gray-700 z-10 p-1.5 sm:p-3">
                     <ul className="space-y-2">
                         <li className="flex items-center px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer" onClick={handleView}>
                             <FiEye size={16} className="mr-3" />

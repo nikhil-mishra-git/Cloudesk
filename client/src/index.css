@@ -41,3 +41,7 @@ body {
 om-shape-divider-bottom-1752690977 .shape-fill {
   fill: #1449E7;
 }
+
+.transition-transform {
+  transition: transform 0.3s ease-in-out;
+}

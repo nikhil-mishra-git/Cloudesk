@@ -49,7 +49,7 @@ const DocumentList = ({ fileName, owner, date, fileType, file, onViewFile }) => 
     const { icon, gradient } = getFileIconInfo(fileType);
 
     return (
-        <div className="flex items-center space-x-4 bg-white rounded-lg shadow p-1.5 md:p-4 mb-4">
+        <div className="flex items-center space-x-4 bg-white rounded-lg shadow p-1.5 py-3 md:p-4 mb-4">
 
             <FileIconBox icon={icon} gradient={gradient} />
 

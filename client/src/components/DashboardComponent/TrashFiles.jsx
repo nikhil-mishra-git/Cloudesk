@@ -57,7 +57,7 @@ const TrashFiles = ({ title = "Trash Files", onViewChange }) => {
           />
         </div>
       ) : viewType === 'grid' ? (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {trashFiles.map((file) => (
             <DocumentCard
               key={file._id}

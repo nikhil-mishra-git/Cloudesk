@@ -13,6 +13,7 @@ import FilePreviewModal from "./MultiUsedComponent/FilePreviewModal";
 import DocumentCard from "./FilesComponent/DocumentCard";
 import DocumentList from "./FilesComponent/DocumentList";
 import ThreeDotMenu from "./FilesComponent/ThreeDotMenu";
+import MobileBottomNav from "./DashboardComponent/MobileBottomNav";
 
 export {
     LogoutButton,
@@ -29,5 +30,6 @@ export {
     PrivateRoute,
     ConfirmModal,
     FilePreviewModal,
-    TrashFiles
+    TrashFiles,
+    MobileBottomNav
 }

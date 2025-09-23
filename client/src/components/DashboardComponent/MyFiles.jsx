@@ -34,7 +34,7 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
 
   return (
     <div className="p-1.5 md:p-10">
-      <div className="w-full bg-white rounded-2xl flex flex-row items-center justify-between gap-4">
+      <div className="w-full bg-white rounded-2xl flex flex-row items-center justify-between gap-2 pt-2 sm:gap-4">
         <div>
           <h2 className="text-sm md:text-2xl tracking-wide font-semibold text-zinc-500">
             Hello, <br />
@@ -75,7 +75,7 @@ const MyFiles = ({ title = 'Documents', onViewChange }) => {
           <EmptyState message="No files found. Upload to get started!" />
         </div>
       ) : viewType === 'grid' ? (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="mt-10 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {filteredFiles.map((file) => (
             <DocumentCard
               key={file._id}
