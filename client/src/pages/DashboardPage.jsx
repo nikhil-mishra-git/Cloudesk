@@ -28,7 +28,7 @@ const DashboardPage = () => {
         }}
       >
         <div className="flex-none self-start">
-          <DashboardSidebar/>
+          <DashboardSidebar />
         </div>
 
         <div className="flex-1 h-full overflow-y-auto rounded-3xl">
@@ -38,11 +38,13 @@ const DashboardPage = () => {
         </div>
       </div>
 
-      <MobileBottomNav />
-
       {previewFile && (
         <FilePreviewModal file={previewFile} onClose={handleClosePreview} />
       )}
+
+      <div className="sm:hidden">
+        <MobileBottomNav />
+      </div>
     </div>
   );
 };

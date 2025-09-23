@@ -160,32 +160,32 @@ const ThreeDotMenu = ({ file, onView, className = '' }) => {
             </button>
 
             {isMenuOpen && (
-                <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-38 sm:w-48 text-[13px] sm:text-sm text-gray-700 z-10 p-1.5 sm:p-3">
+                <div className="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-34 sm:w-48 text-[10px] sm:text-sm text-gray-700 z-10 p-1 sm:p-3">
                     <ul className="space-y-2">
-                        <li className="flex items-center px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer" onClick={handleView}>
+                        <li className="flex items-center px-2 sm:px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer" onClick={handleView}>
                             <FiEye size={16} className="mr-3" />
                             View
                         </li>
                         {!trashed && (
-                            <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleDownload}>
+                            <li className="flex items-center px-2 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleDownload}>
                                 <FiDownload size={16} className="mr-3" />
                                 Download
                             </li>
                         )}
                         {!trashed && (
-                            <li className="flex items-center px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleStarred}>
+                            <li className="flex items-center px-2 sm:px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleStarred}>
                                 <FiStar size={16} className="mr-3" color={starred ? 'gold' : 'gray'} />
                                 {starred ? 'Unstar' : 'Star'}
                             </li>
                         )}
                         {trashed && (
-                            <li className="flex items-center px-4 py-2 hover:bg-green-100 cursor-pointer text-green-600" onClick={handleRestore}>
+                            <li className="flex items-center px-2 sm:px-4 py-2 hover:bg-green-100 cursor-pointer text-green-600" onClick={handleRestore}>
                                 <FiCornerUpLeft size={16} className="mr-3" />
                                 Restore
                             </li>
                         )}
                         <li
-                            className="flex items-center px-4 py-2 hover:bg-red-100 cursor-pointer text-red-500"
+                            className="flex items-center px-2 sm:px-4 py-2 hover:bg-red-100 cursor-pointer text-red-500"
                             onClick={trashed ? handlePermanentDelete : handleSoftDelete}
                         >
                             <FiTrash size={16} className="mr-3" />

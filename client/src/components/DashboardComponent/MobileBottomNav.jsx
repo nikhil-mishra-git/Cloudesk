@@ -36,7 +36,7 @@ const MobileBottomNav = () => {
   return (
     <nav
       ref={containerRef}
-      className="sm:hidden fixed bottom-4 left-4 right-4 rounded-2xl border border-gray-100 z-40 p-2 backdrop-blur-sm bg-white/95 overflow-hidden"
+      className="sm:hidden fixed bottom-1 left-4 right-4 rounded-2xl border border-gray-100 z-40 p-2 backdrop-blur-sm overflow-hidden"
     >
       {/* Sliding background */}
       <div

@@ -50,7 +50,7 @@ const DocumentCard = ({ fileName, owner, date, fileType, file, onViewFile }) => 
     const { icon, gradient } = getFileIconInfo(file.format);
 
     return (
-        <div className="relative bg-white rounded-2xl shadow transition-all duration-300 w-full max-w-sm overflow-visible group">
+        <div className="relative bg-white rounded-2xl shadow transition-all duration-300 w-full max-w-sm overflow-hidden group">
 
             <div className="bg-[#f1f3f5] px-4 sm:px-6 py-8 md:py-12 relative">
 
@@ -68,7 +68,7 @@ const DocumentCard = ({ fileName, owner, date, fileType, file, onViewFile }) => 
 
             <div className="px-3 md:px-6 py-4">
                 <h3 className="text-xs sm:text-base font-semibold text-gray-800 truncate">{fileName}</h3>
-                <div className="flex justify-between items-center text-[8px] sm:text-xs text-gray-500 my-3">
+                <div className="flex justify-between items-center text-[9px] sm:text-xs text-gray-500 my-3">
                     <span className="truncate">{owner}</span>
                     <span>{date}</span>
                 </div>
